@@ -1,0 +1,23 @@
+{
+    "manifest_version" : 2,
+
+    "name" : "taobao click data viewer",
+    "version" : "0.1",
+    "description" : "taobao click data viewer",
+
+    "content_scripts" : [{
+            "matches" : ["http://www.taobao.com/"],
+            "js" : ["index.js"],
+            "css" : ["style.css"]
+        }],
+
+    "background": {
+        "scripts": ["background.js"],
+        "persistent": true
+    },
+
+    "permissions" : [
+        "http://*/*",
+        "https://*/*"
+    ]
+}

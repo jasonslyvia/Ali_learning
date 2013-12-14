@@ -1,0 +1,31 @@
+.chrome-click-data{
+    height: 16px !important;
+    line-height: 16px !important;
+    font-size: 10px !important;
+    font-weight: normal !important;
+    color: #fff !important;
+    opacity: 0.4;
+    z-index: 1000;
+    text-shadow: 0 0 1px #000;
+    transition: .2s all;
+}
+
+.chrome-click-data:hover{
+    opacity: 1;
+}
+
+.c1{
+    background-color: #00FFFF;
+}
+.c2{
+    background-color: #99FF00;
+}
+.c3{
+    background-color: #FFFF00;
+}
+.c4{
+    background-color: #FF6633;
+}
+.c5{
+    background-color: #FF0000;
+}
