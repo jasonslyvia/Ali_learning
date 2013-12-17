@@ -8,7 +8,8 @@
     "content_scripts" : [{
             "matches" : ["http://www.taobao.com/"],
             "js" : ["index.js"],
-            "css" : ["style.css"]
+            "css" : ["style.css"],
+            "run_at": "document_end"
         }],
 
     "background": {

@@ -5,11 +5,10 @@
  *  @version 0.0.1
  */
 
-document.addEventListener("DOMContentLoaded", labelClickData, false);
-window.addEventListener("load", labelClickData, false);
 //针对lazy load产生的a标签，再次尝试添加浏览量标签
 window.addEventListener("scroll", labelClickData, false);
 
+labelClickData();
 
 var clickData = null;
 /*
@@ -99,21 +98,4 @@ function labelClickData(){
             }
         }//for
     });
-}
-
-
-/*
- *  获取父容器的spm值
- *
- *  @param {Node} node 子节点的引用，一般为a标签
- *  @return {string}
- */
-function getParentSpm(node){
-    while(node = node.parentNode){
-        if (node.tagName.toLowerCase() === "div" &&
-            node.getAttribute("data-spm") !== null) {
-            return node.getAttribute("data-spm");
-        }
-    }
-    return null;
 }
