@@ -1,0 +1,63 @@
+{
+    "success": true,
+    "date": "2014-01-02",
+    "message": "",
+    "data": [
+        {
+            "name": "winxp",
+           "y": 95941
+        },
+        {
+           "name": "win7",
+           "y": 49439
+        },
+        {
+           "name": "ipad",
+           "y": 3743
+        },
+        {
+           "name": "win8",
+           "y": 2219
+        },
+        {
+           "name": "winvista",
+           "y": 641
+        },
+        {
+           "name": "macintosh",
+           "y": 578
+        },
+        {
+           "name": "win2003",
+           "y": 362
+        },
+        {
+           "name": "linux",
+           "y": 136
+        },
+        {
+           "name": "winother",
+           "y": 109
+        },
+        {
+           "name": "android",
+           "y": 87
+        },
+        {
+           "name": "unknown",
+           "y": 84
+        },
+        {
+           "name": "iphone",
+           "y": 23
+        },
+        {
+           "name": "win2000",
+           "y": 19
+        },
+        {
+           "name": "ubuntu",
+           "y": 7
+        }
+    ]
+}

@@ -29,3 +29,54 @@
 .c5{
     background-color: #FF0000;
 }
+
+#popup{
+    width: 150px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+#popup li{
+    line-height: 2;
+}
+
+#popup a{
+    display: block;
+    text-decoration: none;
+    color: #666;
+    width: 100%;
+    height: 100%;
+    transition: .5s all;
+}
+
+#popup .divider{
+    margin: 5px 0;
+    border-bottom: 1px #ccc solid;
+    box-shadow: 1px 1px #fefefe;
+}
+
+#popup a:hover{
+    color: #000;
+    font-weight: 900;
+}
+
+.mask{
+    display: -webkit-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-align-items: center;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0, .7);
+    z-index: 9999 !important;
+}
+
+.mask > div{
+    width: 100%;
+}

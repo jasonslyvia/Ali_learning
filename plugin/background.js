@@ -11,14 +11,21 @@ if (!chrome.runtime) {
     chrome.runtime.connect = chrome.extension.connect;
 }
 
+//简单常数封装
+var DATA = {
+    getClickData: "data/click.json",
+    getDealTrend: "data/deal-trend.json",
+    getDealHour: "data/deal-hour.json",
+    getOS: "data/os.json"
+};
+
 
 /*
  *  监听chrome插件发来的请求，进行响应
  */
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-    console.log("message received");
-    if (request.method == "getClickData"){
-        ajax(chrome.extension.getURL("click.json"),
+    if (DATA.hasOwnProperty(request.method)){
+        ajax(chrome.extension.getURL(DATA[request.method]),
             'get',
             null,
             sendResponse);
@@ -38,7 +45,6 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 function ajax(url, method, data, callback){
 
     method = method || "get";
-    url = url || "click.json";
     data = data || null;
 
     var xhr = new XMLHttpRequest();
@@ -46,7 +52,6 @@ function ajax(url, method, data, callback){
         if (xhr.readyState === 4 && xhr.status === 200) {
             if (typeof callback === "function") {
                 var data = JSON.parse(xhr.responseText);
-                data = data.data.spm;
                 callback(data);
             }
             else{
