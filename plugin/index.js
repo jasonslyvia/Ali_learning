@@ -60,12 +60,16 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
  *
  *  @param {function} callback 数据初始化成功后执行的回调函数
  */
+var dataArr = [];
 function initData(type, callback){
-    if (!data) {
-        chrome.runtime.sendMessage({method: type}, callback);
+    if (!dataArr[type]) {
+        chrome.runtime.sendMessage({method: type}, function(data){
+            dataArr[type] = data;
+            callback(data);
+        });
     }
     else{
-        callback(data);
+        callback(dataArr[type]);
     }
 }
 
