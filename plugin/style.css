@@ -78,5 +78,49 @@
 }
 
 .mask > div{
-    width: 100%;
+    width: auto;
+}
+
+svg{
+    background-color: #fafafa;
+    padding: 20px;
+}
+.svg-rect{
+    fill: rgb(221, 233, 254);
+    stroke: rgb(182, 204, 249);
+    stroke-width: 1px;
+}
+.svg-text-label{
+    stroke: none;
+    fill: #666;
+    font-size: 12px;
+}
+.svg-text-value{
+    font-size: 12px;
+    font-family: "Arial";
+}
+.svg-center-rect{
+    fill:#4F8AFF;
+}
+.svg-center-label{
+    stroke: none;
+    fill: #fff;
+    font-size: 14px;
+}
+.svg-button-rect{
+    fill: #f6f6f6;
+}
+.svg-button-label{
+    font-family: "Arial";
+    font-size: 12px;
+}
+.svg-link{
+    font-size: 12px;
+    fill: #fff;
+}
+.svg-path{
+    fill: none;
+    stroke-width: 10px;
+    stroke: #ccc;
+    stroke-opacity: 0.2;
 }

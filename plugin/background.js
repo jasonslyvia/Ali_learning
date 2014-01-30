@@ -16,7 +16,8 @@ var DATA = {
     getClickData: "data/click.json",
     getDealTrend: "data/deal-trend.json",
     getDealHour: "data/deal-hour.json",
-    getOS: "data/os.json"
+    getOS: "data/os.json",
+    getFromTo: "data/sourceAndDirection.json"
 };
 
 

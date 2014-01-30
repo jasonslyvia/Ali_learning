@@ -45,6 +45,13 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
             });
         }
         break;
+        //来源去向图（d3手绘）
+        case 'fromTo': {
+            initData("getFromTo", function(fromToData){
+                plotFromToGraph(fromToData);
+            });
+        }
+        break;
         default:
         throw new TypeError("未知popup请求："+request.method);
     }
@@ -372,4 +379,285 @@ function plotPieChart(date, OSData){
             data: refinedOSData
         }]
     });
+}
+
+function plotFromToGraph(fromToData){
+    var graph = createMask("graph");
+
+    //用于编辑每一侧矩形的累计高度，以便设置纵向偏移
+    var totalHeight = 0;
+    //矩形之间的纵向间隔
+    var marginTop = 5;
+
+    //svg画布的长宽
+    var viewHeight = 500;
+    var viewWidth = 800;
+
+    //矩形的最小、最大高度
+    var minHeight = 20;
+    var maxHeight = 100;
+    //矩形的宽度
+    var rectWidth = 180;
+    //左矩形中label的横坐标
+    var leftRectLabelX = 5;
+    //左矩形中数据label的横坐标;
+    var leftRectValueX = 170;
+    //右矩形中label的横坐标
+    var rightRectLabelX = 100;
+    //右矩形中数据label的横坐标;
+    var rightRectValueX = 5;
+
+    //中间矩形的长宽
+    var centerRectHeight = 250;
+    var centerRectWidth = 150;
+
+    //矩形与中间节点之间的距离
+    var gap = (viewWidth - rectWidth * 2 - centerRectWidth) / 2;
+
+    //中间矩形四边距
+    var centerRectTop = 125;
+    var centerRectLeft = rectWidth + gap;
+    var centerRectRight = centerRectLeft + centerRectWidth;
+
+    //中心连线宽度
+    var lineWidth = 10;
+    var halfLineWidth = lineWidth / 2;
+    //中心连线beizer曲线系数
+    var bezierFactor = 0.4;
+
+    //将矩形所占百分比map到[0,viewHeight]区间以计算高度
+    //TODO: 两边矩形总高度不同
+    var scaleFunc = d3.scale.linear()
+                      .range([0, viewHeight])
+                      .domain([0, 1]);
+
+    draw(fromToData);
+    /*
+     *  d3核心绘图函数
+     *
+     *  @param {mixed} data 源数据
+     */
+    function draw(data){
+        'use strict';
+
+        var svg = d3.select("#graph")
+          .append("svg")
+          .attr("width", viewWidth)
+          .attr("height", viewHeight);
+
+        //添加filter
+        addShadowFilter(svg);
+
+        //绘制来源
+        svg.selectAll("g")
+          .data(cleanData(data.data.previous), function(d){
+            return d.name;
+          })
+          .enter()
+          .append("g")
+          .each(function(d, i){
+            return drawG.call(this, d, i, "left");
+          });
+
+        totalHeight = 0;
+        //绘制去向
+        svg.selectAll("g")
+          .data(cleanData(data.data.next), function(d){
+            return d.name + Math.random();
+          })
+          .enter()
+          .append("g")
+          .each(function(d, i){
+            return drawG.call(this, d, i, "right");
+          });
+
+        //绘制中心节点
+        var centerG = svg.append("g")
+                            .attr("class", "svg-center-g")
+                            .attr("transform", "translate("+centerRectLeft+", "+centerRectTop+")");
+        centerG.append("rect")
+            .attr("class", "svg-center-rect")
+            .attr("height", centerRectHeight)
+            .attr("width", centerRectWidth);
+        centerG.append("text")
+            .attr("class", "svg-center-label")
+            .text(data.data.core.name)
+            .attr("x", 40)
+            .attr("y", 30);
+        centerG.append("rect")
+            .attr("class", "svg-button-rect")
+            .attr("width", 80)
+            .attr("height", 20)
+            .attr("x", 35)
+            .attr("y", 50)
+            .attr("rx", 5)
+            .attr("ry", 5)
+            .attr("filter", "url(#shadowFilter)");
+        centerG.append("text")
+                .attr("class", "svg-button-label")
+                .text("uv:100%")
+                .attr("x", 50)
+                .attr("y", 65);
+        centerG.append("a")
+                    .attr("xlink:href", "http://taobao.com")
+                    .attr("target", "_blank")
+                    .attr("class", "svg-link")
+               .append("text")
+                    .html("更多数据&gt;")
+                    .attr("x", 90)
+                    .attr("y", 90);
+    }
+
+    /*
+     *  绘制一个简单的内容框（包含数据名及值）
+     *
+     *  @param {d} object 数据的详细信息
+     *  @param {i} int 当前数据的index
+     *  @param {type} string 若绘制左侧内容，则type为"left";若右侧则为"right"
+     *                       根据此参数调整内容框内数据名及值的位置
+     *  @return {返回类型}
+     */
+    function drawG(d, i, type){
+        var g = d3.select(this);
+        var gHeight = 0;
+
+        g.attr("class", "svg-g")
+        .attr("transform", function(){
+            var x = type == "left" ? 0 : centerRectRight + gap;
+            return "translate("+ x +"," + totalHeight +")"
+        })
+        //添加背景块
+        .append("rect")
+        .attr("class", "svg-rect")
+        .attr("height", function(d){
+            var height = scaleFunc(d._percentage);
+            //限定最小、最大值
+            height = Math.max(minHeight, height);
+            height = Math.min(maxHeight, height);
+
+            gHeight = height;
+            return height;
+        })
+        .attr("width", rectWidth);
+
+        //绘制来源一侧
+        //TODO: don't hack
+        if (type == "left") {
+            var y = gHeight / 2 + halfLineWidth;
+            drawText(g, d.name, "svg-text-label", leftRectLabelX, y, "start");
+            drawText(g, d.percentage+'%', "svg-text-value", leftRectValueX, y, "end");
+            //与中心点连线
+            var initX = rectWidth;
+            var initY = totalHeight + marginTop + gHeight / 2 - halfLineWidth;
+            var finalY = i * lineWidth + 200;
+            var finalX = centerRectLeft;
+
+            var deltaX = finalX - initX;
+            //使用cubic bezier curve
+            var middleX = finalX - deltaX * bezierFactor;
+            var middleY1 = initY;
+            var middleY2 = finalY;
+
+            var path = "M"+ initX +"," + initY;
+            path += " C" + middleX + "," + middleY1;
+            path += " " + middleX + "," + middleY2;
+            path += " " + finalX + "," + finalY;
+            d3.select("svg")
+              .append("path")
+              .attr("class", "svg-path")
+              .attr("d", path);
+        }
+        //绘制去向一侧
+        else if (type == "right") {
+            var y = gHeight / 2 + halfLineWidth;
+            drawText(g, d.percentage+'%', "svg-text-value", rightRectValueX, y, "start");
+            drawText(g, d.name, "svg-text-label", rightRectLabelX, y, "start");
+
+            //与中心点连线
+            var initX = centerRectRight + gap;
+            var initY = totalHeight + marginTop + gHeight / 2 - halfLineWidth;
+            var finalY = i * lineWidth + 200;
+            var finalX = centerRectRight;
+
+            var deltaX = finalX - initX;
+            //使用cubic bezier curve
+            var middleX = finalX - deltaX * bezierFactor;
+            var middleY1 = initY;
+            var middleY2 = finalY;
+
+            var path = "M" + initX + "," + initY;
+            path += " C" + middleX + "," + middleY1;
+            path += " " + middleX + "," + middleY2;
+            path += " " + finalX + "," + finalY;
+            d3.select("svg")
+              .append("path")
+              .attr("class", "svg-path")
+              .attr("d", path);
+        }
+
+        //更新总高度，方便计算下一个g的纵向偏移
+        totalHeight = totalHeight + marginTop + gHeight;
+    }
+
+    /*
+     *  绘制svg text元素
+     *
+     *  @param {object} g 父元素
+     *  @param {string} text 文本内容
+     *  @param {string} className 元素类名
+     *  @param {int} x 横向偏移
+     *  @param {int} y 纵向偏移
+     *  @param {string} anchorStyle 文本对齐方式
+     *  @return {返回类型}
+     */
+    function drawText(g, text, className, x, y, anchorStyle){
+        g.append("text")
+        .attr("class", className)
+        .attr("x", x)
+        .attr("y", y)
+        .attr("text-anchor", anchorStyle)
+        .text(text);
+    }
+
+    //为svg增加filter
+    function addShadowFilter(svg){
+        var filter = svg.append("defs")
+                .append("filter")
+               .attr("id", "shadowFilter")
+               .attr("height", "130%");
+        filter.append("feGaussianBlur")
+                   .attr("in", "SourceAlpha")
+                   .attr("stdDeviation", 1.5)
+                   .attr("result", "shadow");
+        filter.append("feOffset")
+                .attr("in", "shadow")
+                .attr("dy", .5)
+                .attr("result", "offsetShadow");
+        var feMerge = filter.append("feMerge");
+        feMerge.append("feMergeNode")
+                   .attr("in", "offsetShadow");
+        feMerge.append("feMergeNode")
+                   .attr("in", "SourceGraphic");
+    }
+
+    /*
+     *  数据清理，获得每一项数据占总数据的百分比
+     *
+     *  @param {object} data 原始数据
+     *  @return {object}
+     */
+    function cleanData(data){
+        if (!Array.isArray(data)) {
+            throw TypeError(data + " is not an array");
+        }
+        var totalPercentage = 0;
+        data.forEach(function(el, index){
+            totalPercentage += el.percentage;
+        });
+
+        data.forEach(function(el, index){
+            el._percentage = el.percentage / totalPercentage;
+        });
+        return data;
+    }
 }

@@ -1,1 +1,101 @@
-{"isSuccess":true,"data":{"previous":[{"name":"来源网站一","percentage":31.24},{"name":"来源网站二","percentage":15.95},{"name":"来源网站三","percentage":10.91},{"name":"来源网站四","percentage":5.88},{"name":"来源网站五","percentage":4.44},{"name":"来源网站六","percentage":4.12},{"name":"来源网站七","percentage":3.75},{"name":"来源网站八","percentage":3.65},{"name":"来源网站九","percentage":3.05},{"name":"来源网站十","percentage":3.02},{"name":"其他","percentage":47.95}],"next":[{"name":"去向网站一","percentage":51.13},{"name":"去向网站二","percentage":25.37},{"name":"去向网站三","percentage":17.44},{"name":"去向网站四","percentage":10.42},{"name":"去向网站五","percentage":9.79},{"name":"去向网站六","percentage":7.61},{"name":"去向网站七","percentage":6.44},{"name":"去向网站八","percentage":5.13},{"name":"去向网站九","percentage":4.56},{"name":"去向网站十","percentage":4.22},{"name":"其他","percentage":59.9}],"core":{"id":35,"name":"淘宝网首页"}}}
+{
+    "isSuccess": true,
+    "data": {
+        "previous": [
+            {
+                "name": "来源网站一",
+                "percentage": 31.24
+            },
+            {
+                "name": "来源网站二",
+                "percentage": 15.95
+            },
+            {
+                "name": "来源网站三",
+                "percentage": 10.91
+            },
+            {
+                "name": "来源网站四",
+                "percentage": 5.88
+            },
+            {
+                "name": "来源网站五",
+                "percentage": 4.44
+            },
+            {
+                "name": "来源网站六",
+                "percentage": 4.12
+            },
+            {
+                "name": "来源网站七",
+                "percentage": 3.75
+            },
+            {
+                "name": "来源网站八",
+                "percentage": 3.65
+            },
+            {
+                "name": "来源网站九",
+                "percentage": 3.05
+            },
+            {
+                "name": "来源网站十",
+                "percentage": 3.02
+            },
+            {
+                "name": "其他",
+                "percentage": 47.95
+            }
+        ],
+        "next": [
+            {
+                "name": "去向网站一",
+                "percentage": 51.13
+            },
+            {
+                "name": "去向网站二",
+                "percentage": 25.37
+            },
+            {
+                "name": "去向网站三",
+                "percentage": 17.44
+            },
+            {
+                "name": "去向网站四",
+                "percentage": 10.42
+            },
+            {
+                "name": "去向网站五",
+                "percentage": 9.79
+            },
+            {
+                "name": "去向网站六",
+                "percentage": 7.61
+            },
+            {
+                "name": "去向网站七",
+                "percentage": 6.44
+            },
+            {
+                "name": "去向网站八",
+                "percentage": 5.13
+            },
+            {
+                "name": "去向网站九",
+                "percentage": 4.56
+            },
+            {
+                "name": "去向网站十",
+                "percentage": 4.22
+            },
+            {
+                "name": "其他",
+                "percentage": 59.9
+            }
+        ],
+        "core": {
+            "id": 35,
+            "name": "淘宝网首页"
+        }
+    }
+}

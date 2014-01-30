@@ -2,12 +2,12 @@
     "manifest_version" : 2,
 
     "name" : "Taobao Data Viewer",
-    "version" : "0.2",
+    "version" : "0.3",
     "description" : "Taobao Data Viewer",
 
     "content_scripts" : [{
             "matches" : ["http://www.taobao.com/"],
-            "js" : ["index.js", "lib/jquery-1.8.2.js", "lib/highcharts.js"],
+            "js" : ["index.js", "lib/jquery-1.8.2.js", "lib/highcharts.js", "lib/d3.v3.js"],
             "css" : ["style.css"],
             "run_at": "document_end"
         }],
